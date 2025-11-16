@@ -71,3 +71,22 @@ The easiest way to deploy your app is with [Expo Application Services (EAS)](htt
 ---
 
 If you enjoy using React Native Reusables, please consider giving it a ⭐ on [GitHub](https://github.com/founded-labs/react-native-reusables). Your support means a lot!
+
+## Uso como librería de componentes
+
+Esta rama contiene la librería de componentes `componentes-ui` preparada para publicarse en npm.
+
+- Exportaciones principales: `THEME`, `NAV_THEME`, `createThemeWithOverrides`, `Text`, `Button`, `Icon`.
+- Para usar el preset y sobrescribir colores:
+
+```ts
+import { createThemeWithOverrides } from 'componentes-ui';
+
+const { theme, navTheme } = createThemeWithOverrides({
+    light: { primary: '#0ea5e9', background: '#ffffff' }
+});
+
+// navTheme puede pasarse a NavigationContainer
+```
+
+El build produce `dist/` con `cjs`, `esm` y `d.ts`. Ejecuta `npm run build` localmente.

@@ -1,5 +1,5 @@
 import { DarkTheme, DefaultTheme, type Theme } from '@react-navigation/native';
- 
+
 export const THEME = {
   light: {
     background: 'hsl(0 0% 100%)',
@@ -54,7 +54,9 @@ export const THEME = {
     chart5: 'hsl(340 75% 55%)',
   },
 };
- 
+
+export type ThemeColors = typeof THEME.light;
+
 export const NAV_THEME: Record<'light' | 'dark', Theme> = {
   light: {
     ...DefaultTheme,
@@ -79,3 +81,46 @@ export const NAV_THEME: Record<'light' | 'dark', Theme> = {
     },
   },
 };
+
+function mergeColorShallow(base: ThemeColors, overrides?: Partial<ThemeColors>) {
+  if (!overrides) return { ...base };
+  return { ...base, ...overrides };
+}
+
+export function createThemeWithOverrides(
+  overrides?: Partial<Record<'light' | 'dark', Partial<ThemeColors>>>
+): { theme: typeof THEME; navTheme: Record<'light' | 'dark', any> } {
+  const theme = {
+    light: mergeColorShallow(THEME.light, overrides?.light),
+    dark: mergeColorShallow(THEME.dark, overrides?.dark),
+  } as typeof THEME;
+
+  const navTheme: Record<'light' | 'dark', Theme> = {
+    light: {
+      ...DefaultTheme,
+      colors: {
+        background: theme.light.background,
+        border: theme.light.border,
+        card: theme.light.card,
+        notification: theme.light.destructive,
+        primary: theme.light.primary,
+        text: theme.light.foreground,
+      },
+    },
+    dark: {
+      ...DarkTheme,
+      colors: {
+        background: theme.dark.background,
+        border: theme.dark.border,
+        card: theme.dark.card,
+        notification: theme.dark.destructive,
+        primary: theme.dark.primary,
+        text: theme.dark.foreground,
+      },
+    },
+  };
+
+  return { theme, navTheme };
+}
+
+export default THEME;
